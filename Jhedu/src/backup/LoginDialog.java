@@ -141,7 +141,7 @@ public class LoginDialog extends JFrame implements ActionListener {
 				role = new Role(Role.RoleLevel.SUPERVISOR);
 				
 			} else {
-				role = new Role(Role.RoleLevel.ROLE1);
+				role = new Role(Role.RoleLevel.TEAM_SUPPORT);
 			}
 
 			showDialog(role);
@@ -159,7 +159,7 @@ public class LoginDialog extends JFrame implements ActionListener {
 		if ( role.getLevel() == RoleLevel.SUPERVISOR) {
 			SupervisorDialog dialog = new SupervisorDialog(role);
 			dialog.setVisible(true);
-		} else if ( role.getLevel() == RoleLevel.ROLE1 ) {
+		} else if ( role.getLevel() == RoleLevel.TEAM_SUPPORT ) {
 			SourceViewPanel dialog = new SourceViewPanel(role);
 			dialog.setVisible(true);
 		}

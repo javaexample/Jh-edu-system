@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
 		JButton btnSourceframe = new JButton("SourceFrame");
 		btnSourceframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SourceViewPanel frame = new SourceViewPanel(new Role(Role.RoleLevel.ROLE1));
+				SourceViewPanel frame = new SourceViewPanel(new Role(Role.RoleLevel.TEAM_SUPPORT));
 				frame.setVisible(true);
 			}
 		});
@@ -113,7 +113,7 @@ public class MainFrame extends JFrame {
 		JButton btnSourceviewdialog = new JButton("학습지원");
 		btnSourceviewdialog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SourceViewPanel dialog = new SourceViewPanel(new Role(RoleLevel.ROLE1));
+				SourceViewPanel dialog = new SourceViewPanel(new Role(RoleLevel.TEAM_SUPPORT));
 				dialog.setVisible(true);
 			}
 		});
