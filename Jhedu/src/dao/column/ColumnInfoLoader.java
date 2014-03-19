@@ -24,12 +24,11 @@ public class ColumnInfoLoader {
 			String columnName = line.substring(p0, p1);
 			
 			String type = line.substring(p1 + 1) ;
-						
+			
 			ColumnMapper column = new ColumnMapper(index, columnName, type );
 			columnMap.put(columnName, column);
 			
 		}
-		
 	}
 
 	public int getColumnSize() {
