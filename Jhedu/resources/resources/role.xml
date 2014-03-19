@@ -1,0 +1,24 @@
+<roles>
+	<role name="관리자">
+		<read columns="*" />
+		<write columns="*" except="소스번호"/>
+	</role>
+	
+	<role name="학습지원">
+		<read columns="*"/>
+		<write columns="*" except="소스번호,담당자"/>
+	</role>
+	
+	<role name="학습운영">
+		<read columns="소스번호,소스종류,유입날짜,유입시간,일반전화,휴대전화,이름,성별,나이,이메일,주소,문의내용,담당자,요망날짜,요망시간,
+교재상태,결제상태" />
+		<write columns="교재상태"/>
+	</role>
+	
+	<role name="회계">
+		<read columns="기수,급수,과목,할인율,등록금,결제상태,결제방법,카드종류,카드번호,유효기간월,유효기간년,할부개월,은행명,
+현금영수증발급,카드전표발급,승인번호 "/>
+		<write columns="결제상태,승인번호"></write>
+	</role>
+	
+</roles>

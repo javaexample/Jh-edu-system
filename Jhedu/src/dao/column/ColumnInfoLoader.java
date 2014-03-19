@@ -1,6 +1,7 @@
 package dao.column;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -43,6 +44,10 @@ public class ColumnInfoLoader {
 		}
 		
 		return mapper;
+	}
+
+	public Collection<ColumnMapper> getAllMapper() {
+		return columnMap.values();
 	}
 	
 	
