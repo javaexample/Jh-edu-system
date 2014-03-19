@@ -7,7 +7,6 @@ import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import model.role.RoleMapper.ColumnAccess;
 
 import org.junit.After;
 import org.junit.Before;
