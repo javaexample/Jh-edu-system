@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -26,6 +27,13 @@ public class TestSourceEditFrame extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		try { // 이쁘게 해주는거
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception ee) {
+		}
+
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -64,8 +72,7 @@ public class TestSourceEditFrame extends JFrame {
 	}
 
 	private void openEditDialog(){
-		SourceEditDialog dialog = new SourceEditDialog(new EditListener());
-		dialog.setSize(300, 500);
+		SourceEditDialog dialog = new SourceEditDialog(null, new EditListener());
 		dialog.setLocationRelativeTo(this);
 		dialog.setVisible(true);
 	}
