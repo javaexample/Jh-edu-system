@@ -30,7 +30,7 @@ public class SourceEditDialog extends JDialog {
 		
 		this.setTitle("소스 편집");
 		
-		this.setSize(600, 500);
+		this.setSize(600, 700);
 		
 		this.listener = parent ;
 		

@@ -193,7 +193,8 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 				
 				SourceModel source = dao.getSourceById( sourceID );
 				
-				editDialog.setVisible(true);			
+				editDialog.setVisible(true);
+				editDialog.setLocationRelativeTo(SourceViewPanel.this);
 				editDialog.showSource( source);
 				
 			} catch (ClassNotFoundException e1) {

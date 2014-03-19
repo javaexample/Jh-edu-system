@@ -169,6 +169,7 @@ public class SupervisorPanel extends JPanel {
 		
 		SourceEditDialog editDialog = new SourceEditDialog(ctx, null);
 		editDialog.setVisible(true);
+		editDialog.setLocationRelativeTo(this);
 		
 		editDialog.showSource(source);
 	}
