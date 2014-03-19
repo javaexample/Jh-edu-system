@@ -77,7 +77,8 @@ public class MainFrame extends JFrame {
 		JButton btnLogindialog = new JButton("직원로그인");
 		btnLogindialog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginPanel login = new LoginPanel(registry);
+				/* TODO JHContext 생성로직 작성해야함. */
+				LoginPanel login = new LoginPanel(null);
 				login.setVisible(true);
 			}
 		});

@@ -6,12 +6,13 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
+import Crm.NewMain.JHContext;
+
 import view.component.SourceViewPanel;
 import view.component.SupervisorPanel;
 import model.EmployeeModel;
 import model.Role;
 import model.RoleLevel;
-import dao.DAORegistry;
 import dao.EmployeeDAO;
 
 public class LoginPanel extends JPanel implements ActionListener {
@@ -24,14 +25,15 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private JButton bt1 = new JButton("회원가입");
 	private JButton btLogin = new JButton("로그인");
 
-	private DAORegistry registory;
+//	private DAORegistry registory;
+	private JHContext context;
 
-	public LoginPanel(DAORegistry registory) {
+	public LoginPanel(JHContext context) {
 
 		this.init(); // init실행
 		this.start(); // start실행
 
-		this.registory = registory;
+		this.context = context;
 
 	}
 
@@ -116,7 +118,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		}
 
 		try {
-			EmployeeDAO dao = registory.getEmployeeDAO();
+			EmployeeDAO dao = context.getDAORegistry().getEmployeeDAO();
 
 			EmployeeModel emp = dao.getEmployee(id, password);
 
