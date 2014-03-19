@@ -14,7 +14,7 @@ import view.SupervisorDialog;
 import view.component.SourceViewPanel;
 import model.EmployeeModel;
 import model.Role;
-import model.Role.RoleLevel;
+import model.RoleLevel;
 import dao.DAORegistry;
 import dao.EmployeeDAO;
 
@@ -138,10 +138,10 @@ public class LoginDialog extends JFrame implements ActionListener {
 			Role role = null;
 			
 			if ( emp.getPart().equals("°ü¸®ÀÚ")) {
-				role = new Role(Role.RoleLevel.SUPERVISOR);
+				role = new Role(RoleLevel.SUPERVISOR);
 				
 			} else {
-				role = new Role(Role.RoleLevel.TEAM_SUPPORT);
+				role = new Role(RoleLevel.TEAM_SUPPORT);
 			}
 
 			showDialog(role);

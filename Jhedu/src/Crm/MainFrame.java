@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 
 import model.Role;
-import model.Role.RoleLevel;
+import model.RoleLevel;
 import view.FormNewSourceDialog;
 import view.LoginPanel;
 import view.NewEmployeeDialog;
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
 		JButton btnSourceframe = new JButton("SourceFrame");
 		btnSourceframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SourceViewPanel frame = new SourceViewPanel(new Role(Role.RoleLevel.TEAM_SUPPORT));
+				SourceViewPanel frame = new SourceViewPanel(new Role(RoleLevel.TEAM_SUPPORT));
 				frame.setVisible(true);
 			}
 		});

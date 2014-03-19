@@ -4,8 +4,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import model.Role;
+import model.RoleLevel;
 import model.SourceModel;
-import model.Role.RoleLevel;
 
 import java.awt.BorderLayout;
 
@@ -50,9 +50,9 @@ public class SourceEditDialog extends JDialog {
 		editComp.showSource(src);
 		RoleLevel level = role.getLevel();
 		
-		if ( level == Role.RoleLevel.SUPERVISOR) {
+		if ( level == RoleLevel.SUPERVISOR) {
 			this.editComp.setTypeEditable(true);
-		} else if ( level == Role.RoleLevel.TEAM_SUPPORT ) {
+		} else if ( level == RoleLevel.TEAM_SUPPORT ) {
 			this.editComp.setTypeEditable(false) ;
 		} else {
 			throw new RuntimeException("알 수 없는 role level : " + role );
