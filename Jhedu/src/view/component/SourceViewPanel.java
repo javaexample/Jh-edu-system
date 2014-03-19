@@ -11,7 +11,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import Crm.NewMain.JHContext;
+import Crm.JHContext;
 import view.SourceEditDialog;
 import view.SourceEditDialog.SourceUpdateListener;
 import model.Role;
@@ -42,10 +42,12 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 		
 		this.setLayout(new BorderLayout());
 		
-		String [] columnName = new String[] {
-			"소스번호", "소스종류", "유입날짜"	
-		};
-		tableModel = new SourceTableModel(columnName, modelVector);
+//		String [] columnName = new String[] {
+//			"소스번호", "소스종류", "유입날짜"
+//		};
+		
+		String [] columnNames = ctx.getBaseColumnNames();
+		tableModel = new SourceTableModel(columnNames, modelVector);
 		
 		sourceTable = new JTable(tableModel);
 		

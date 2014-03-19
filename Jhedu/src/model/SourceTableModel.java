@@ -21,6 +21,7 @@ public class SourceTableModel extends AbstractTableModel {
 	public SourceTableModel (String [] columnNames) {
 		this.columnNames = columnNames;
 		this.dataList = new ArrayList<>();
+		
 	}
 	
 	public int getRowCount() {
@@ -94,7 +95,57 @@ public class SourceTableModel extends AbstractTableModel {
 			cellData = source.getSourceType();
 		} else if ( columnIndex == 2) {
 			cellData = source.getWhenContact();
-		} else {
+		} else if ( columnIndex == 3) {
+			cellData = source.getContactTime();
+		} else if ( columnIndex == 4) {
+			cellData = source.getHomePhone();
+		} else if ( columnIndex == 5) {
+			cellData = source.getCellPhone();
+		} else if ( columnIndex == 6) {
+			cellData = source.getName();
+		} else if ( columnIndex == 7) {
+			cellData = source.getGender();
+		} else if ( columnIndex == 8) {
+			cellData = source.getAge();
+		} else if ( columnIndex == 9) {
+			cellData = source.getEmail();
+		} else if ( columnIndex == 10) {
+			cellData = source.getAddress();
+		} else if ( columnIndex == 11) {
+			cellData = source.getInquiry(); 
+		} else if ( columnIndex == 12) {
+			cellData = source.getChargedEmployee();
+		} else if ( columnIndex == 13) {
+			cellData = source.getRequiredDate();
+		} else if ( columnIndex == 14) {
+			cellData = source.getRequiredTime();
+		} else if ( columnIndex == 15) {
+//			cellData = source.getDueDate();
+			cellData = source.getSourceState();
+		} else if ( columnIndex == 16) {
+			cellData = source.getTextBookState();
+		} else if ( columnIndex == 17) {
+			cellData = source.getSettlementState();
+		} /*
+		  // TODO 나머지는 나중에
+		else if ( columnIndex == 18) {
+			;
+		} else if ( columnIndex == 19) {
+			;
+		} else if ( columnIndex == 3) {
+			;
+		} else if ( columnIndex == 3) {
+			;
+		} else if ( columnIndex == 3) {
+			;
+		} else if ( columnIndex == 3) {
+			;
+		} else if ( columnIndex == 3) {
+			;
+		}  */
+		
+		
+		else {
 			throw new RuntimeException(" 범위를 벗어난 column index : " + columnIndex );
 		}
 		

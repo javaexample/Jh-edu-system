@@ -11,7 +11,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 
-import Crm.NewMain.JHContext;
+import Crm.JHContext;
 import view.component.SourceEditPanel;
 import dao.DAORegistry;
 import dao.SourceDAO;

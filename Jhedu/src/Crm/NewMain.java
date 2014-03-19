@@ -8,7 +8,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import model.Role;
 import model.role.RoleMapper;
 import view.LoginPanel;
 import dao.DAORegistry;
@@ -20,29 +19,6 @@ import java.io.InputStream;
 
 public class NewMain extends JFrame {
 
-	public static class JHContext {
-		DAORegistry registry ;
-		ColumnInfoLoader columnLoader;
-		RoleMapper roleMapper;
-		
-		Role role ; // 로그인 하면 설정
-		public DAORegistry getDAORegistry() {
-			return registry;
-		}
-		
-		public void setRole(Role role) {
-			this.role = role;
-		}
-		
-		public Role getRole() {
-			 return this.role;
-		}
-
-		public RoleMapper getRoleMapper() {
-			return this.roleMapper;
-		}
-		
-	}
 	public static void main(String[] args) {
 
 		try { // 이쁘게 해주는거

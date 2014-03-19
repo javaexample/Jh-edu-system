@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import Crm.NewMain.JHContext;
+import Crm.JHContext;
 import view.SourceEditDialog;
 import dao.DAORegistry;
 import dao.SourceDAO;
@@ -42,9 +42,7 @@ public class SupervisorPanel extends JPanel {
 	
 	private HashMap<String, List<String>> searchData = new HashMap<>();
 
-	private String [] columnName = new String[] {
-		"소스번호", "소스종류", "유입날짜"	
-	};
+	private String [] columnName;
 	private SourceTableModel tableModel;
 		
 	
@@ -53,6 +51,10 @@ public class SupervisorPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public SupervisorPanel(JHContext ctx) {
+		
+		this.ctx = ctx;
+		this.columnName = ctx.getBaseColumnNames();
+		
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel searchPanel = new JPanel();
@@ -121,13 +123,11 @@ public class SupervisorPanel extends JPanel {
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
 		
-		
 		installSearchForm();
 		installListener();
 		
 		search();
 		
-		this.ctx = ctx;
 
 	}
 	

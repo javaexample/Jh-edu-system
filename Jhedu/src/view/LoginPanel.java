@@ -6,8 +6,7 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-import Crm.NewMain.JHContext;
-
+import Crm.JHContext;
 import view.component.SourceViewPanel;
 import view.component.SupervisorPanel;
 import model.EmployeeModel;
@@ -124,8 +123,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 			if (emp.getPart().equals("관리자")) {
 				role = new Role(RoleLevel.SUPERVISOR);
-			} else {
+			} else if ( emp.getPart().equals("학습지원")){
 				role = new Role(RoleLevel.TEAM_SUPPORT);
+			} else if ( emp.getPart().equals("회계") ) {
+				role = new Role(RoleLevel.TEAM_ACCOUNT);
 			}
 
 			context.setRole(role);
@@ -147,7 +148,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		{
 			nextComp = new SupervisorPanel(ctx);
 
-		} else if (role.getLevel() == RoleLevel.TEAM_SUPPORT) {
+		} else /*if (role.getLevel() == RoleLevel.TEAM_SUPPORT)*/ {
 			nextComp = new SourceViewPanel(ctx);
 
 		}

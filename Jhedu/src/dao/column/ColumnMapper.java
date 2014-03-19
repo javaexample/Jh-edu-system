@@ -11,11 +11,19 @@ public class ColumnMapper {
 	private int index ;
 	private String columnName;
 	private String columnType ; // type in database
+	private boolean isBaseColumn;
 	
 	public ColumnMapper(int index, String columnName, String type) {
 		this.index = index;
 		this.columnName = columnName;
 		this.columnType = type;
+	}
+	
+	public ColumnMapper(int index, String columnName, String type, boolean isBaseColumn) {
+		this.index = index;
+		this.columnName = columnName;
+		this.columnType = type;
+		this.isBaseColumn = isBaseColumn;
 	}
 	
 	public int getIndex() {
@@ -30,9 +38,12 @@ public class ColumnMapper {
 		return columnType;
 	}
 
-	
+	public boolean isBaseColumn() {
+		return this.isBaseColumn;
+	}
 	
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -42,6 +53,7 @@ public class ColumnMapper {
 		result = prime * result
 				+ ((columnType == null) ? 0 : columnType.hashCode());
 		result = prime * result + index;
+		result = prime * result + (isBaseColumn ? 1231 : 1237);
 		return result;
 	}
 
@@ -53,7 +65,6 @@ public class ColumnMapper {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		@SuppressWarnings("rawtypes")
 		ColumnMapper other = (ColumnMapper) obj;
 		if (columnName == null) {
 			if (other.columnName != null)
@@ -67,6 +78,8 @@ public class ColumnMapper {
 			return false;
 		if (index != other.index)
 			return false;
+		if (isBaseColumn != other.isBaseColumn)
+			return false;
 		return true;
 	}
 
@@ -74,7 +87,7 @@ public class ColumnMapper {
 	public String toString() {
 		return "Column[" +index + ", " + 
 				columnName + ", t:" + 
-				columnType + "]";
+				columnType + "base : " + isBaseColumn + "]";
 	}
 	
 	

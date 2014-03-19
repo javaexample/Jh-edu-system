@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Crm.NewMain.JHContext;
+import Crm.JHContext;
 import model.Role;
 import view.component.SupervisorPanel;
 

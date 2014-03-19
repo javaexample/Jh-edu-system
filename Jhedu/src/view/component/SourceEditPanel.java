@@ -33,7 +33,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
-import Crm.NewMain.JHContext;
+import Crm.JHContext;
 
 //소스편집창
 public class SourceEditPanel extends JPanel {
@@ -121,6 +121,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblSourceType, gbc_lblSourceType);
 		
 		sourceTypeCBox = new JComboBox(new String[]{"메일", "전화"});
+		sourceTypeCBox.setEnabled(false);
 		sourceTypeCBox.setName("소스종류");
 		GridBagConstraints gbc_chargeComboBox = new GridBagConstraints();
 		gbc_chargeComboBox.insets = new Insets(0, 0, 5, 0);
@@ -137,6 +138,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblDate, gbc_lblDate);
 		
 		sourceDateField = new JTextField();
+		sourceDateField.setEnabled(false);
 		sourceDateField.setName("\uC720\uC785\uB0A0\uC9DC");
 		sourceDateField.addFocusListener(new FocusAdapter() {
 			@Override
@@ -161,6 +163,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblTime, gbc_lblTime);
 		
 		textField = new JTextField();
+		textField.setEnabled(false);
 		textField.setName("\uC720\uC785\uC2DC\uAC04");
 		gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
@@ -178,6 +181,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_1, gbc_label_1);
 		
 		textField_1 = new JTextField();
+		textField_1.setEnabled(false);
 		textField_1.setName("\uC77C\uBC18\uC804\uD654");
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
@@ -195,6 +199,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_2, gbc_label_2);
 		
 		textField_2 = new JTextField();
+		textField_2.setEnabled(false);
 		textField_2.setName("\uD734\uB300\uC804\uD654");
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 0);
@@ -213,6 +218,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_3, gbc_label_3);
 		
 		textField_3 = new JTextField();
+		textField_3.setEnabled(false);
 		textField_3.setName("\uC774\uB984");
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
 		gbc_textField_3.insets = new Insets(0, 0, 5, 5);
@@ -231,6 +237,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_4, gbc_label_4);
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setEnabled(false);
 		comboBox.setName("\uC131\uBCC4");
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
@@ -248,6 +255,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_5, gbc_label_5);
 		
 		textField_4 = new JTextField();
+		textField_4.setEnabled(false);
 		textField_4.setName("\uB098\uC774");
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
 		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
@@ -266,6 +274,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_6, gbc_label_6);
 		
 		textField_5 = new JTextField();
+		textField_5.setEnabled(false);
 		textField_5.setName("\uC774\uBA54\uC77C");
 		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
 		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
@@ -284,6 +293,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_7, gbc_label_7);
 		
 		textField_6 = new JTextField();
+		textField_6.setEnabled(false);
 		textField_6.setName("\uC8FC\uC18C");
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
 		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
@@ -302,6 +312,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_8, gbc_label_8);
 		
 		textField_7 = new JTextField();
+		textField_7.setEnabled(false);
 		textField_7.setName("\uBB38\uC758\uB0B4\uC6A9");
 		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
 		gbc_textField_7.insets = new Insets(0, 0, 5, 0);
@@ -320,6 +331,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_9, gbc_label_9);
 		
 		chargeComboBox = new JComboBox();
+		chargeComboBox.setEnabled(false);
 		
 		chargeComboBox.setName("\uB2F4\uB2F9\uC790");
 		gbc_chargeComboBox = new GridBagConstraints();
@@ -338,6 +350,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_10, gbc_label_10);
 		
 		textField_8 = new JTextField();
+		textField_8.setEnabled(false);
 		textField_8.setName("\uC694\uB9DD\uB0A0\uC9DC");
 		GridBagConstraints gbc_textField_8 = new GridBagConstraints();
 		gbc_textField_8.insets = new Insets(0, 0, 5, 5);
@@ -356,6 +369,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel, gbc_lblNewLabel);
 		
 		textField_9 = new JTextField();
+		textField_9.setEnabled(false);
 		textField_9.setName("\uC694\uB9DD\uC2DC\uAC04");
 		GridBagConstraints gbc_textField_9 = new GridBagConstraints();
 		gbc_textField_9.insets = new Insets(0, 0, 5, 0);
@@ -374,6 +388,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		textField_10 = new JTextField();
+		textField_10.setEnabled(false);
 		textField_10.setName("\uB9C8\uAC10\uB0A0\uC9DC");
 		GridBagConstraints gbc_textField_10 = new GridBagConstraints();
 		gbc_textField_10.insets = new Insets(0, 0, 5, 5);
@@ -392,6 +407,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_11, gbc_label_11);
 		
 		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setEnabled(false);
 		comboBox_1.setName("\uC18C\uC2A4\uC0C1\uD0DC");
 		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
 		gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
@@ -409,6 +425,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_3, gbc_lblNewLabel_3);
 		
 		textField_11 = new JTextField();
+		textField_11.setEnabled(false);
 		textField_11.setName("\uC624\uB354\uC77C\uC790");
 		GridBagConstraints gbc_textField_11 = new GridBagConstraints();
 		gbc_textField_11.insets = new Insets(0, 0, 5, 0);
@@ -427,6 +444,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
 		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.setEnabled(false);
 		comboBox_2.setName("\uAE30\uC218");
 		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
 		gbc_comboBox_2.insets = new Insets(0, 0, 5, 5);
@@ -444,6 +462,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_12, gbc_label_12);
 		
 		JComboBox comboBox_3 = new JComboBox();
+		comboBox_3.setEnabled(false);
 		comboBox_3.setName("\uAE09\uC218");
 		GridBagConstraints gbc_comboBox_3 = new GridBagConstraints();
 		gbc_comboBox_3.insets = new Insets(0, 0, 5, 0);
@@ -461,6 +480,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_5, gbc_lblNewLabel_5);
 		
 		textField_12 = new JTextField();
+		textField_12.setEnabled(false);
 		textField_12.setName("\uACFC\uBAA9");
 		GridBagConstraints gbc_textField_12 = new GridBagConstraints();
 		gbc_textField_12.insets = new Insets(0, 0, 5, 5);
@@ -479,6 +499,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_6, gbc_lblNewLabel_6);
 		
 		textField_13 = new JTextField();
+		textField_13.setEnabled(false);
 		textField_13.setName("\uD560\uC778\uC728");
 		GridBagConstraints gbc_textField_13 = new GridBagConstraints();
 		gbc_textField_13.insets = new Insets(0, 0, 5, 0);
@@ -497,6 +518,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_7, gbc_lblNewLabel_7);
 		
 		textField_14 = new JTextField();
+		textField_14.setEnabled(false);
 		textField_14.setName("\uB4F1\uB85D\uAE08");
 		GridBagConstraints gbc_textField_14 = new GridBagConstraints();
 		gbc_textField_14.insets = new Insets(0, 0, 5, 5);
@@ -515,6 +537,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_8, gbc_lblNewLabel_8);
 		
 		JComboBox comboBox_4 = new JComboBox();
+		comboBox_4.setEnabled(false);
 		comboBox_4.setName("\uACB0\uC81C\uC0C1\uD0DC");
 		GridBagConstraints gbc_comboBox_4 = new GridBagConstraints();
 		gbc_comboBox_4.insets = new Insets(0, 0, 5, 0);
@@ -532,6 +555,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_9, gbc_lblNewLabel_9);
 		
 		JComboBox comboBox_5 = new JComboBox();
+		comboBox_5.setEnabled(false);
 		comboBox_5.setName("\uAD50\uC7AC\uC0C1\uD0DC");
 		GridBagConstraints gbc_comboBox_5 = new GridBagConstraints();
 		gbc_comboBox_5.insets = new Insets(0, 0, 5, 5);
@@ -549,6 +573,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_10, gbc_lblNewLabel_10);
 		
 		JComboBox comboBox_6 = new JComboBox();
+		comboBox_6.setEnabled(false);
 		comboBox_6.setName("\uACB0\uC81C\uBC29\uBC95");
 		GridBagConstraints gbc_comboBox_6 = new GridBagConstraints();
 		gbc_comboBox_6.insets = new Insets(0, 0, 5, 0);
@@ -566,6 +591,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_11, gbc_lblNewLabel_11);
 		
 		textField_15 = new JTextField();
+		textField_15.setEnabled(false);
 		textField_15.setName("\uCE74\uB4DC\uC885\uB958");
 		GridBagConstraints gbc_textField_15 = new GridBagConstraints();
 		gbc_textField_15.insets = new Insets(0, 0, 5, 5);
@@ -584,6 +610,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_12, gbc_lblNewLabel_12);
 		
 		textField_16 = new JTextField();
+		textField_16.setEnabled(false);
 		textField_16.setName("\uCE74\uB4DC\uBC88\uD638");
 		GridBagConstraints gbc_textField_16 = new GridBagConstraints();
 		gbc_textField_16.insets = new Insets(0, 0, 5, 0);
@@ -602,6 +629,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_13, gbc_lblNewLabel_13);
 		
 		textField_17 = new JTextField();
+		textField_17.setEnabled(false);
 		textField_17.setName("\uC720\uD6A8\uAE30\uAC04\uC6D4");
 		GridBagConstraints gbc_textField_17 = new GridBagConstraints();
 		gbc_textField_17.insets = new Insets(0, 0, 5, 5);
@@ -620,6 +648,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_14, gbc_lblNewLabel_14);
 		
 		textField_18 = new JTextField();
+		textField_18.setEnabled(false);
 		textField_18.setName("\uC720\uD6A8\uAE30\uAC04\uB144");
 		GridBagConstraints gbc_textField_18 = new GridBagConstraints();
 		gbc_textField_18.insets = new Insets(0, 0, 5, 0);
@@ -638,6 +667,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_13, gbc_label_13);
 		
 		textField_19 = new JTextField();
+		textField_19.setEnabled(false);
 		textField_19.setName("\uD560\uBD80\uAC1C\uC6D4");
 		GridBagConstraints gbc_textField_19 = new GridBagConstraints();
 		gbc_textField_19.insets = new Insets(0, 0, 5, 5);
@@ -656,6 +686,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_15, gbc_lblNewLabel_15);
 		
 		textField_20 = new JTextField();
+		textField_20.setEnabled(false);
 		textField_20.setName("\uC740\uD589\uBA85");
 		GridBagConstraints gbc_textField_20 = new GridBagConstraints();
 		gbc_textField_20.insets = new Insets(0, 0, 5, 0);
@@ -674,6 +705,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_16, gbc_lblNewLabel_16);
 		
 		JComboBox comboBox_7 = new JComboBox();
+		comboBox_7.setEnabled(false);
 		comboBox_7.setName("\uD604\uAE08\uC601\uC218\uC99D\uBC1C\uAE09");
 		GridBagConstraints gbc_comboBox_7 = new GridBagConstraints();
 		gbc_comboBox_7.insets = new Insets(0, 0, 5, 5);
@@ -691,6 +723,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(lblNewLabel_17, gbc_lblNewLabel_17);
 		
 		JComboBox comboBox_8 = new JComboBox();
+		comboBox_8.setEnabled(false);
 		comboBox_8.setName("\uCE74\uB4DC\uC804\uD45C\uBC1C\uAE09");
 		GridBagConstraints gbc_comboBox_8 = new GridBagConstraints();
 		gbc_comboBox_8.insets = new Insets(0, 0, 5, 0);
@@ -708,6 +741,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(label_14, gbc_label_14);
 		
 		textField_21 = new JTextField();
+		textField_21.setEnabled(false);
 		textField_21.setName("\uC2B9\uC778\uBC88\uD638");
 		GridBagConstraints gbc_textField_21 = new GridBagConstraints();
 		gbc_textField_21.insets = new Insets(0, 0, 5, 5);
@@ -733,6 +767,7 @@ public class SourceEditPanel extends JPanel {
 		editContainer.add(scrollPane, gbc_scrollPane);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setEnabled(false);
 		textArea.setName("\uBE44\uACE0");
 		scrollPane.setViewportView(textArea);
 		
@@ -808,17 +843,5 @@ public class SourceEditPanel extends JPanel {
 	public boolean isModifed() {
 		// TODO 변경 내역 확인하는 로직 구현해야 함.
 		return true;
-	}
-
-	
-	
-	public void setTypeEditable(boolean editable) {
-		sourceTypeCBox.setEnabled(editable);
-	}
-	
-	
-	public void setDateEditable(boolean editable) {
-		// TODO 유입 날짜 수정 여부
-	}
-	
+	}	
 }

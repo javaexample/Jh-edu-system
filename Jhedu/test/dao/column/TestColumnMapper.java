@@ -3,6 +3,7 @@ package dao.column;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,6 +40,13 @@ public class TestColumnMapper {
 		mapper = loader.findColumnMapper("현금영수증발급");
 		assertEquals ("boolean", mapper.getColumnType());
 		
+	}
+	
+	@Test
+	public void test_get_base_columns() {
+		List<ColumnMapper> baseColumns = loader.getBaseColumns();
+		
+		assertEquals (18, baseColumns.size());
 	}
 	
 	

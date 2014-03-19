@@ -60,7 +60,10 @@ public class SourceDAO {
 	public List<SourceModel> getSource() throws SQLException {
 		
 		
-		String sql = "select 소스번호, 소스종류, 유입날짜 from crmdb";
+		String sql = "select 소스번호, 소스종류, 유입날짜, 유입시간, "
+				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
+				+ "from crmdb";
 		
 		Connection conn = connManager.getConnection();
 		PreparedStatement pstmt = null;
@@ -75,11 +78,7 @@ public class SourceDAO {
 			
 			ArrayList<SourceModel> list = new ArrayList<>();
 			while (rs.next()) {
-				int id = rs.getInt(1);
-				String type = rs.getString(2);
-				String whenContacted = rs.getString(3);
-				
-				SourceModel aSource = new SourceModel(id, type, whenContacted);
+				SourceModel aSource = rsToSource(rs);
 				
 				list.add(aSource);
 			}
@@ -195,7 +194,12 @@ public class SourceDAO {
 	 */
 	public List<SourceModel> findBySourceState(String [] states) throws SQLException {
 		
-		String query = "SELECT 소스번호, 소스종류, 유입날짜 FROM crmdb ";
+		
+		
+		String query = "SELECT 소스번호, 소스종류, 유입날짜, 유입시간, "
+				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
+				+ "FROM crmdb ";
 		
 		query += "WHERE " ; 
 		for (int i = 0; i < states.length; i++) {
@@ -231,15 +235,70 @@ public class SourceDAO {
 		} finally {
 			connManager.close(conn, pstmt, rs);
 		}
+		
 	}
 	
 	
 	private SourceModel rsToSource(ResultSet rs) throws SQLException {
-		
+	
 		int id = rs.getInt("소스번호");
 		String type = rs.getString("소스종류");
 		String date = rs.getString("유입날짜");
 		SourceModel source = new SourceModel(id, type, date);
+		
+		String time = rs.getString("유입시간");
+		source.setContactTime(time);
+		
+		String phone0 = rs.getString("일반전화");
+		source.setHomePhone(phone0);
+		
+		String phone1 = rs.getString("휴대전화");
+		source.setCellPhone(phone1);
+		
+		String name = rs.getString("이름");
+		source.setName(name);
+		
+		String gender = rs.getString("성별");
+		source.setGender(gender);
+		
+		String age = rs.getString("나이");
+		source.setAge(age);
+		
+		/*
+		 * "select 소스번호, 소스종류, 유입날짜, 
+		 * 
+		 * 유입시간, "
+				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
+				+ "from crmdb";
+		 */
+		
+		String email = rs.getString("이메일");
+		source.setEmail( email );
+		
+		String address = rs.getString("주소");
+		source.setAddress(address);
+		
+		String inquiry = rs.getString("문의내용");
+		source.setInquiry(inquiry);
+		
+		String chargedEmp = rs.getString("담당자");
+		source.setChargedEmployee(chargedEmp);
+		
+		String date0 = rs.getString("요망날짜");
+		source.setRequiredDate(date0);
+		
+		String date1 = rs.getString("요망시간");
+		source.setRequiredTime(date1);
+		
+		String sourceState = rs.getString("소스상태");
+		source.setSourceState(sourceState);
+		
+		String textBookState = rs.getString("교재상태");
+		source.setTextBookState(textBookState);
+		
+		String settlmentSate = rs.getString("결제상태");
+		source.setSettlementState(settlmentSate);
 		
 		return source;
 	}
