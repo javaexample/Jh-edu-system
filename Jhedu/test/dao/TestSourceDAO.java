@@ -54,9 +54,9 @@ public class TestSourceDAO {
 	
 	@Test
 	public void test_find_source_by_type() throws SQLException {
-		List<SourceModel> sources = dao.findBySourceType("메일");
+		List<SourceModel> sources = dao.findBySourceType("이름", "김영재");
 		
-		assertEquals(9, sources.size());
+		assertEquals(2, sources.size());
 	}
 
 }

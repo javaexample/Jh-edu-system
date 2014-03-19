@@ -14,6 +14,9 @@ public class JHContext {
 	RoleMapper roleMapper;
 	
 	Role role ; // 로그인 하면 설정
+	
+	private int reloadInterval  = 3; // as seconds
+	
 	public DAORegistry getDAORegistry() {
 		return registry;
 	}
@@ -38,6 +41,10 @@ public class JHContext {
 			names[i] = mappers.get(i).getColumnName();
 		}
 		return names;
+	}
+	
+	public int getReloadInterval() {
+		return this.reloadInterval;
 	}
 	
 }

@@ -52,15 +52,6 @@ public class SourceEditDialog extends JDialog {
 	
 	public void showSource(SourceModel src) {
 		editComp.showSource(src);
-//		RoleLevel level = role.getLevel();
-//		
-//		if ( level == RoleLevel.SUPERVISOR) {
-//			this.editComp.setTypeEditable(true);
-//		} else if ( level == RoleLevel.TEAM_SUPPORT ) {
-//			this.editComp.setTypeEditable(false) ;
-//		} else {
-//			throw new RuntimeException("알 수 없는 role level : " + role );
-//		}
 	}
 	
 	/*

@@ -21,30 +21,37 @@ public class SourceDAO {
 	}
 	
 	
-	public List<SourceModel> findBySourceType(String sourceType) throws SQLException {
+	public List<SourceModel> findBySourceType(String searchColumn, String searchValue) throws SQLException {
 		
-		String sql = "select 소스번호, 소스종류, 유입날짜 from crmdb where 소스종류 = ? ";
+		String sql = "select "
+				
+				+ "소스번호, 소스종류, 유입날짜, 유입시간, "
+				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태,"
+				+ "마감날짜, 비고, 오더일자, 기수, 급수, 과목수, 할인율, 등록금, 결제방법, 카드종류,"
+				+ "카드번호, 유효기간월, 유효기간년, 할부개월, 은행명, 현금영수증발급, 카드전표발급, 승인번호 "
+				
+				+ "from crmdb where " + searchColumn 
+				+ " = ? ";
 		
 		Connection conn = connManager.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
+		System.out.println("query : " + sql);
+		
 		try {
 			pstmt = conn.prepareStatement(sql,
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
-			pstmt.setString(1, sourceType);
+			pstmt.setString(1, searchValue);
 			
 			rs = pstmt.executeQuery();
 			
 			ArrayList<SourceModel> list = new ArrayList<SourceModel>();
 			while (rs.next()) {
-				int id = rs.getInt(1);
-				String type = rs.getString(2);
-				String whenContacted = rs.getString(3);
-				
-				SourceModel aSource = new SourceModel(id, type, whenContacted);
+				SourceModel aSource = rsToSource(rs);
 				
 				list.add(aSource);
 			}
@@ -60,9 +67,16 @@ public class SourceDAO {
 	public List<SourceModel> getSource() throws SQLException {
 		
 		
-		String sql = "select 소스번호, 소스종류, 유입날짜, 유입시간, "
+		String sql = "select "
+				+ "소스번호, 소스종류, 유입날짜, 유입시간, "
 				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
-				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태,"
+				+ "마감날짜, 비고, 오더일자, 기수, 급수, 과목수, 할인율, 등록금, 결제방법, 카드종류,"
+				+ "카드번호, 유효기간월, 유효기간년, 할부개월, 은행명, 현금영수증발급, 카드전표발급, 승인번호 "
+				
+//				+ "소스번호, 소스종류, 유입날짜, 유입시간, "
+//				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
+//				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
 				+ "from crmdb";
 		
 		Connection conn = connManager.getConnection();
@@ -126,6 +140,9 @@ public class SourceDAO {
 	
 	public SourceModel insertSource(SourceModel newSource) throws SQLException {
 
+		// TODO SourceEditPanel 에서 편집할때 호출되는 부분
+		//      column 전부 나열해줘야 함.
+		
 		String insertQuery = "INSERT INTO crmdb  ( 소스번호, 소스종류, 유입날짜) values (?, ?, ?)";
 		
 		Connection conn = connManager.getConnection();
@@ -196,9 +213,12 @@ public class SourceDAO {
 		
 		
 		
-		String query = "SELECT 소스번호, 소스종류, 유입날짜, 유입시간, "
+		String query = "SELECT "
+				+ "소스번호, 소스종류, 유입날짜, 유입시간, "
 				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
-				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
+				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태,"
+				+ "마감날짜, 비고, 오더일자, 기수, 급수, 과목수, 할인율, 등록금, 결제방법, 카드종류,"
+				+ "카드번호, 유효기간월, 유효기간년, 할부개월, 은행명, 현금영수증발급, 카드전표발급, 승인번호 "
 				+ "FROM crmdb ";
 		
 		query += "WHERE " ; 
@@ -264,15 +284,6 @@ public class SourceDAO {
 		String age = rs.getString("나이");
 		source.setAge(age);
 		
-		/*
-		 * "select 소스번호, 소스종류, 유입날짜, 
-		 * 
-		 * 유입시간, "
-				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
-				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
-				+ "from crmdb";
-		 */
-		
 		String email = rs.getString("이메일");
 		source.setEmail( email );
 		
@@ -299,6 +310,26 @@ public class SourceDAO {
 		
 		String settlmentSate = rs.getString("결제상태");
 		source.setSettlementState(settlmentSate);
+		
+		
+		source.setDueDate(	rs.getString("마감날짜") );
+		source.setExplanaryNote(rs.getString("비고") );
+		source.setOrderDate(rs.getString("오더일자") );
+		source.setSemesterCode(rs.getString("기수"));
+		source.setLevel(rs.getString("급수"));
+		source.setCourseName(rs.getString("과목수"));
+		source.setDiscountRate(rs.getString("할인율"));
+		source.setRegistrationFee(rs.getString("등록금"));
+		source.setSettlementType(rs.getString( "결제방법"));
+		source.setCardType(rs.getString("카드종류"));
+		source.setCardNumber(rs.getString("카드번호"));
+		source.setMonthExpired(rs.getString("유효기간월"));
+		source.setYearExpired(rs.getString("유효기간년"));
+		source.setInstallmentMonths(rs.getString( "할부개월"));
+		source.setBankName(rs.getString("은행명"));
+		source.setCachReceiptRequired(rs.getString("현금영수증발급"));
+		source.setSlipRequired(rs.getString("카드전표발급"));
+		source.setApprovalNum(rs.getString("승인번호"));
 		
 		return source;
 	}

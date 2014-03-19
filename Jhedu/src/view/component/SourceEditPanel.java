@@ -25,6 +25,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusAdapter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.text.JTextComponent;
 
 import Crm.JHContext;
 
@@ -93,16 +96,16 @@ public class SourceEditPanel extends JPanel {
 		
 		sourceNumField = new JTextField();
 		sourceNumField.setName("소스번호");
-		sourceNumField.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				numFieldChanged();
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {}
-		});
+//		sourceNumField.addFocusListener(new FocusListener() 
+//			
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//				numFieldChanged();
+//			}
+//			
+//			@Override
+//			public void focusGained(FocusEvent e) {}
+//		});
 
 		GridBagConstraints gbc_sourceNumField = new GridBagConstraints();
 		gbc_sourceNumField.insets = new Insets(0, 0, 5, 5);
@@ -140,12 +143,12 @@ public class SourceEditPanel extends JPanel {
 		sourceDateField = new JTextField();
 		sourceDateField.setEnabled(false);
 		sourceDateField.setName("\uC720\uC785\uB0A0\uC9DC");
-		sourceDateField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				dateChanged();
-			}
-		});
+//		sourceDateField.addFocusListener(new FocusAdapter() {
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//				dateChanged();
+//			}
+//		});
 		
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
@@ -443,7 +446,7 @@ public class SourceEditPanel extends JPanel {
 		gbc_lblNewLabel_4.gridy = 10;
 		editContainer.add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox comboBox_2 = new JComboBox(new String[]{"이메일", "전화"});
 		comboBox_2.setEnabled(false);
 		comboBox_2.setName("\uAE30\uC218");
 		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
@@ -471,7 +474,7 @@ public class SourceEditPanel extends JPanel {
 		gbc_comboBox_3.gridy = 10;
 		editContainer.add(comboBox_3, gbc_comboBox_3);
 		
-		JLabel lblNewLabel_5 = new JLabel("\uACFC\uBAA9");
+		JLabel lblNewLabel_5 = new JLabel("\uACFC\uBAA9\uC218");
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
 		gbc_lblNewLabel_5.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
@@ -481,7 +484,7 @@ public class SourceEditPanel extends JPanel {
 		
 		textField_12 = new JTextField();
 		textField_12.setEnabled(false);
-		textField_12.setName("\uACFC\uBAA9");
+		textField_12.setName("\uACFC\uBAA9\uC218");
 		GridBagConstraints gbc_textField_12 = new GridBagConstraints();
 		gbc_textField_12.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_12.fill = GridBagConstraints.HORIZONTAL;
@@ -821,24 +824,59 @@ public class SourceEditPanel extends JPanel {
 	 */
 	public void showSource(SourceModel src) {
 		this.sourceNumField.setText("" + src.getId());
-//		this.sourceTypeField.setText( src.getSourceType());
 		this.sourceDateField.setText( src.getWhenContact());
 		
+		ArrayList<Component> components = new ArrayList<>();
+		getAllComponents(components, editContainer);
+		
+		HashMap<String, String> data = src.asMapData();
+		
+		
+		
+		Iterator<String> it = data.keySet().iterator();
+		while( it.hasNext() ) {
+			String keyAsName = it.next();
+			Component comp = findComponent(components, keyAsName);
+			addData(comp, data.get(keyAsName));
+		}
+		
 		currentSource = src;
+	}
+	
+	/*
+	 * 컴포넌트에 값을 넣어주는 메소드
+	 */
+	private void addData(Component comp, String value) {
+		
+		String [] baseNames = ctx.getBaseColumnNames();
+		RoleMapper mapper = ctx.getRoleMapper();
+		Role role = ctx.getRole();
+		
+		Map<String, ColumnAccess> accessColumnMap = mapper.listColumns(role.getRoleName());
+		
+		if ( comp instanceof JTextComponent) {
+			if ( containsName(baseNames, comp.getName()) || accessColumnMap.containsKey(comp.getName()) ) {
+				((JTextComponent)comp).setText(value);
+			}
+			
+		} else if ( comp instanceof JComboBox ) {
+			((JComboBox)comp).setSelectedItem(value);
+		}
+	}
+	
+	private boolean containsName(String [] columns, String value) {
+		for (int i = 0; i < columns.length; i++) {
+			if ( columns[i].equals(value)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public SourceModel getSourceModel() {
 		return currentSource;
 	}
 
-	private void numFieldChanged( ) {
-		currentSource.setId(Integer.parseInt(sourceNumField.getText()) );
-	}
-	
-	private void dateChanged() {
-		currentSource.setWhenContact(sourceDateField.getText());
-	}
-	
 	
 	public boolean isModifed() {
 		// TODO 변경 내역 확인하는 로직 구현해야 함.

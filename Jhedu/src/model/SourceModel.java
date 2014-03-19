@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 public class SourceModel {
@@ -101,19 +102,19 @@ public class SourceModel {
 	private String yearExpired;
 	
 	/** 32. 할부 개월 */
-	private int installmentMonths;
+	private String installmentMonths;
 	
 	/** 33. 은행명*/
 	private String bankName;
 	
 	/** 34. 현금영수증 */
-	private boolean cachReceiptRequired ;
+	private String cachReceiptRequired ;
 	
 	/** 35. 카드전표 */
-	private boolean slipRequired;
+	private String slipRequired;
 	
 	/** 36. 승인번호 */
-	private int approvalNum;
+	private String approvalNum;
 	
 	
 	
@@ -354,11 +355,11 @@ public class SourceModel {
 		this.yearExpired = yearExpired;
 	}
 
-	public int getInstallmentMonths() {
+	public String getInstallmentMonths() {
 		return installmentMonths;
 	}
 
-	public void setInstallmentMonths(int installmentMonths) {
+	public void setInstallmentMonths(String installmentMonths) {
 		this.installmentMonths = installmentMonths;
 	}
 
@@ -370,27 +371,27 @@ public class SourceModel {
 		this.bankName = bankName;
 	}
 
-	public boolean isCachReceiptRequired() {
+	public String isCachReceiptRequired() {
 		return cachReceiptRequired;
 	}
 
-	public void setCachReceiptRequired(boolean cachReceiptRequired) {
+	public void setCachReceiptRequired(String cachReceiptRequired) {
 		this.cachReceiptRequired = cachReceiptRequired;
 	}
 
-	public boolean isSlipRequired() {
+	public String getSlipRequired() {
 		return slipRequired;
 	}
 
-	public void setSlipRequired(boolean slipRequired) {
+	public void setSlipRequired(String slipRequired) {
 		this.slipRequired = slipRequired;
 	}
 
-	public int getApprovalNum() {
+	public String getApprovalNum() {
 		return approvalNum;
 	}
 
-	public void setApprovalNum(int approvalNum) {
+	public void setApprovalNum(String approvalNum) {
 		this.approvalNum = approvalNum;
 	}
 
@@ -457,6 +458,54 @@ public class SourceModel {
 		if (sourceId != other.sourceId)
 			return false;
 		return true;
+	}
+
+	public HashMap<String, String> asMapData() {
+		
+		HashMap<String, String> mapData = new HashMap<>();
+		
+		mapData.put("소스번호", "" + sourceId);
+		mapData.put("소스종류", sourceType);
+		
+		mapData.put("유입날짜", whenContact);
+		mapData.put("유입시간",  contactTime);
+		mapData.put("일반전화", homePhone);
+		mapData.put("휴대전화", cellPhone);
+		mapData.put("이름", name);
+		mapData.put("성별", gender);
+		mapData.put("나이", age);
+		mapData.put("이메일", email);
+		mapData.put("주소", address);
+		mapData.put("문의내용", inquiry);
+		mapData.put("담당자", chargedEmployee);
+		mapData.put("요망날짜", requiredDate);
+		mapData.put("요망시간", requiredTime);
+		mapData.put("마감날짜", dueDate);
+		mapData.put("비고", ExplanaryNote);
+		mapData.put("소스상태", sourceState);
+		mapData.put("오더일자", orderDate);
+		mapData.put("기수", semesterCode);
+		mapData.put("급수", level);
+		mapData.put("과목수", CourseName);
+		mapData.put("할인율", discountRate);
+		mapData.put("등록금", registrationFee);
+		mapData.put("결제상태", settlementState);
+		mapData.put("교재상태", textBookState);
+		mapData.put("결제방법", settlementType);
+		mapData.put("카드종류", cardType);
+		mapData.put("카드번호", cardNumber);
+		mapData.put("유효기간월", monthExpired );
+		mapData.put("유효기간년", yearExpired);
+		mapData.put("할부개월", installmentMonths);
+		mapData.put("은행명", bankName);
+		mapData.put("현금영수증발급", cachReceiptRequired);
+		mapData.put("카드전표발급", slipRequired);
+		mapData.put("승인번호", approvalNum);
+		
+		
+		return mapData;
+		
+		
 	}
 	
 	

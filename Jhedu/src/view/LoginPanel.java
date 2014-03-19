@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import Crm.JHContext;
+import view.SourceEditDialog.SourceUpdateListener;
 import view.component.SourceViewPanel;
 import view.component.SupervisorPanel;
 import model.EmployeeModel;
 import model.Role;
 import model.RoleLevel;
+import model.SourceModel;
 import dao.EmployeeDAO;
 
 public class LoginPanel extends JPanel implements ActionListener {
@@ -127,6 +129,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 				role = new Role(RoleLevel.TEAM_SUPPORT);
 			} else if ( emp.getPart().equals("회계") ) {
 				role = new Role(RoleLevel.TEAM_ACCOUNT);
+			} else if ( emp.getPart().equals("학습운영")) {
+				role = new Role(RoleLevel.TEAM_MANAGE);
+			} else if ( emp.getPart().equals("아르바이트")) {
+				role = new Role(RoleLevel.TEAM_PARTTIMER) ;
 			}
 
 			context.setRole(role);
@@ -144,33 +150,48 @@ public class LoginPanel extends JPanel implements ActionListener {
 		Role role = ctx.getRole();
 		
 		//권한별로 프레임 변경되는 부분
-		if (role.getLevel() == RoleLevel.SUPERVISOR)
-		{
-			nextComp = new SupervisorPanel(ctx);
+		
+		if ( role.getLevel() == RoleLevel.TEAM_PARTTIMER ) {
+			
+			SourceEditDialog dialog = new SourceEditDialog(ctx, new SourceInsertListener());
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent e) {
+					System.exit(0);
+				}
+			});
+			dialog.setLocationRelativeTo(this);
+			dialog.setVisible(true); 
+			
+		} else {
+			if (role.getLevel() == RoleLevel.SUPERVISOR)
+			{
+				nextComp = new SupervisorPanel(ctx);
 
-		} else /*if (role.getLevel() == RoleLevel.TEAM_SUPPORT)*/ {
-			nextComp = new SourceViewPanel(ctx);
+			} else {
+				nextComp = new SourceViewPanel(ctx);
 
+			}
+
+			Container container = this.getParent();
+			while (!(container instanceof JFrame)) {
+				container = container.getParent();
+			}
+
+			JFrame parent = (JFrame) container;
+
+			parent.remove(this);
+			parent.add(nextComp);
+			parent.setResizable(true);
+			parent.setSize(1024, 768);
+			parent.setLocationRelativeTo(null);
+
+			parent.revalidate();
 		}
-		// TODO 이런 식으로 판넬을 늘리면 됩니다.
-		// else if ( role.getLevel() == RoleLevel.ALBA) {
-		// nextComp = new AlbaPanle(role);
-		// }
-
-		Container container = this.getParent();
-		while (!(container instanceof JFrame)) {
-			container = container.getParent();
-		}
-
-		JFrame parent = (JFrame) container;
-
-		parent.remove(this);
-		parent.add(nextComp);
-		parent.setResizable(true);
-		parent.setSize(1024, 768);
-		parent.setLocationRelativeTo(null);
-
-		parent.revalidate();
+		
+		this.setVisible(false);
+		
 	}
 
 	public void start() {
@@ -183,6 +204,16 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 			new NewEmployeeDialog();
 		}
+	}
+	
+	// TODO 아르바이트가 소스를 추가했을때 데이터베이스에 소스를 추가하는 기능 들어가야함.
+	static class SourceInsertListener implements SourceUpdateListener {
 
+		@Override
+		public void sourceUpdated(SourceModel source) {
+			System.out.println("새로 넣을 소스 : " +  source );
+			
+		}
+		
 	}
 }

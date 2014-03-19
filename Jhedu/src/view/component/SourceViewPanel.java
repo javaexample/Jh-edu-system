@@ -12,9 +12,11 @@ import java.util.Vector;
 import javax.swing.*;
 
 import Crm.JHContext;
+import view.SearchResultDialog;
 import view.SourceEditDialog;
 import view.SourceEditDialog.SourceUpdateListener;
 import model.Role;
+import model.RoleLevel;
 import model.SourceModel;
 import model.SourceTableModel;
 import dao.DAORegistry;
@@ -33,18 +35,16 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 	private JTable sourceTable  ;
 	
 	SourceEditDialog editDialog ;
-//	private Role role ;
+
 	private JHContext ctx ;
 	private JTextField sourceTypeTextField;
 	private JComboBox comboBox;
 	
+	ReloadThread reloader ;
+	
 	public SourceViewPanel ( JHContext ctx  ) {
 		
 		this.setLayout(new BorderLayout());
-		
-//		String [] columnName = new String[] {
-//			"소스번호", "소스종류", "유입날짜"
-//		};
 		
 		String [] columnNames = ctx.getBaseColumnNames();
 		tableModel = new SourceTableModel(columnNames, modelVector);
@@ -54,62 +54,66 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 		/* click listener 설치 */
 		sourceTable.addMouseListener(new ClickListener());
 		
-		JPanel searchPanel = new JPanel();
-		add(searchPanel, BorderLayout.NORTH);
-		GridBagLayout gbl_searchPanel = new GridBagLayout();
-//		gbl_searchPanel.columnWidths = new int[]{0, 0, 0, 0};
-//		gbl_searchPanel.rowHeights = new int[] {0, 0, 0, 0};
-//		gbl_searchPanel.columnWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
-//		gbl_searchPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		searchPanel.setLayout(gbl_searchPanel);
+		if ( ctx.getRole().getLevel() == RoleLevel.TEAM_SUPPORT){
+			
+			JPanel searchPanel = new JPanel();
+			add(searchPanel, BorderLayout.NORTH);
+			GridBagLayout gbl_searchPanel = new GridBagLayout();
+			searchPanel.setLayout(gbl_searchPanel);
+
+			comboBox = new JComboBox();
+			GridBagConstraints gbc_comboBox = new GridBagConstraints();
+			gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+			gbc_comboBox.gridx = 1;
+			gbc_comboBox.gridy = 0;
+			searchPanel.add(comboBox, gbc_comboBox);
+			
+			sourceTypeTextField = new JTextField();
+			GridBagConstraints gbc_textField = new GridBagConstraints();
+			gbc_textField.insets = new Insets(0, 0, 5, 5);
+			gbc_textField.gridx = 2;
+			gbc_textField.gridy = 0;
+			searchPanel.add(sourceTypeTextField, gbc_textField);
+			sourceTypeTextField.setColumns(10);
+
+			JButton btnBtn = new JButton("Btn");
+			btnBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					search();
+				}
+			});
+			GridBagConstraints gbc_btnBtn = new GridBagConstraints();
+			gbc_btnBtn.anchor = GridBagConstraints.EAST;
+			gbc_btnBtn.insets = new Insets(0, 0, 5, 0);
+			gbc_btnBtn.gridx = 3;
+			gbc_btnBtn.gridy = 0;
+			searchPanel.add(btnBtn, gbc_btnBtn);
+			
+			JLabel lblNewLabel = new JLabel("New label");
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.weightx = 1.0;
+			gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel.gridx = 0;
+			gbc_lblNewLabel.gridy = 0;
+			searchPanel.add(lblNewLabel, gbc_lblNewLabel);
+			
+			install();
+			
+		}
 		
-		comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.gridx = 1;
-		gbc_comboBox.gridy = 0;
-		searchPanel.add(comboBox, gbc_comboBox);
 		
-		sourceTypeTextField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 0;
-		searchPanel.add(sourceTypeTextField, gbc_textField);
-		sourceTypeTextField.setColumns(10);
-		
-		JButton btnBtn = new JButton("Btn");
-		btnBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				search();
-			}
-		});
-		GridBagConstraints gbc_btnBtn = new GridBagConstraints();
-		gbc_btnBtn.anchor = GridBagConstraints.EAST;
-		gbc_btnBtn.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBtn.gridx = 3;
-		gbc_btnBtn.gridy = 0;
-		searchPanel.add(btnBtn, gbc_btnBtn);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.weightx = 1.0;
-		gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		searchPanel.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JScrollPane scrollpane = new JScrollPane(sourceTable);
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-		panel.setLayout(new BorderLayout());
+		centerPanel.setLayout(new BorderLayout());
 
-		panel.add(scrollpane);
+		centerPanel.add(scrollpane);
 		scrollpane.setBounds(5, 40, 1290, 160);
 
-		this.add(panel);
-		panel.setBounds(5, 5, 1300, 200);
+		this.add(centerPanel);
+		centerPanel.setBounds(5, 5, 1300, 200);
 
 		this.setSize(1375, 770);
 		
@@ -117,37 +121,56 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 		
 		this.editDialog = new SourceEditDialog(ctx, this);
 		
-		install();
+		
+		
 		this.loadData();
+		
+		/* 데이터베이스 조회 스레드 실행시킴*/
+		reloader = new ReloadThread(this, ctx);
+		reloader.start();
 		
 	}
 	
 	private void install() {
-		comboBox.addItem("소스종류");
-//		comboBox.addItem("유입날짜");
-		
+		comboBox.addItem("이름");
+		comboBox.addItem("일반전화");
+		comboBox.addItem("휴대전화");
+		comboBox.addItem("이메일");
 		
 	}
 	
 	
-	private String readSourceType() {
+	private String readColumnToSearch(){
+		return (String) comboBox.getSelectedItem();
+	}
+	
+	private String readQueryText() {
 		return sourceTypeTextField.getText().trim();
 	}
+	
 	public void search() {
 		try {
-			SourceDAO dao = DAORegistry.getInstance().getSourceDAO();
-			String type = readSourceType();
+			SourceDAO dao = ctx.getDAORegistry().getSourceDAO();
+			String column = readColumnToSearch();
+			String type = readQueryText();
 			
 			// TODO type 값이 없으면 중지시켜야 함.
 			
-			List<SourceModel> sources = dao.findBySourceType(type);
+			List<SourceModel> sources = dao.findBySourceType(column, type);
 			
-			tableModel.clearSources();
+			if ( sources.size() == 0) {
+				
+				return ;
+				
+			} else if ( sources.size() == 1 ){
+				tableModel.clearSources();				
+				drawSourceData(sources);
+			} else {
+				SearchResultDialog searchResultDialog = new SearchResultDialog( ctx, this,this );
+				searchResultDialog.showDialog(sources);
+				
+			}
 			
-			drawSourceData(sources);
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -157,6 +180,8 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 		try {
 			dao = DAORegistry.getInstance().getSourceDAO();
 			List<SourceModel> sources = dao.getSource();
+			
+			tableModel.clearSources();
 			
 			drawSourceData(sources);
 			
@@ -208,6 +233,31 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 			
 		}
 		
+	}
+	
+	static class ReloadThread extends Thread  {
+		
+		JHContext ctx ;
+		SourceViewPanel panel ;
+		ReloadThread (SourceViewPanel panel, JHContext context ) {
+			ctx = context;
+			this.panel = panel ;
+		}
+		
+		@Override
+		public void run() {
+			while ( true) {
+				
+				int interval = ctx.getReloadInterval();
+				
+				try {
+					Thread.sleep(interval * 1000 );
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				panel.loadData();
+			}
+		}
 	}
 
 
