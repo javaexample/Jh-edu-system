@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Crm.NewMain.JHContext;
 import model.Role;
 import view.component.SupervisorPanel;
 
@@ -22,7 +23,7 @@ public class SupervisorDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public SupervisorDialog(Role role) {
+	public SupervisorDialog(JHContext ctx) {
 		this.role = role ;
 
 		setBounds(100, 100, 450, 300);
@@ -31,7 +32,7 @@ public class SupervisorDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			supervisorPanel = new SupervisorPanel(role);
+			supervisorPanel = new SupervisorPanel(ctx);
 			contentPanel.add(supervisorPanel);
 		}
 		{

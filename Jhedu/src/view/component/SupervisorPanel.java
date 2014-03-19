@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import Crm.NewMain.JHContext;
 import view.SourceEditDialog;
 import dao.DAORegistry;
 import dao.SourceDAO;
@@ -47,11 +48,11 @@ public class SupervisorPanel extends JPanel {
 	private SourceTableModel tableModel;
 		
 	
-	private Role role ;
+	private JHContext ctx ;
 	/**
 	 * Create the panel.
 	 */
-	public SupervisorPanel(Role role) {
+	public SupervisorPanel(JHContext ctx) {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel searchPanel = new JPanel();
@@ -126,7 +127,7 @@ public class SupervisorPanel extends JPanel {
 		
 		search();
 		
-		this.role = role;
+		this.ctx = ctx;
 
 	}
 	
@@ -165,10 +166,11 @@ public class SupervisorPanel extends JPanel {
 	private void processSourceDetailDialog() {
 		int selectedRow = table.getSelectedRow();
 		SourceModel source = tableModel.getSourceAt(selectedRow);
-		SourceEditDialog editDialog = new SourceEditDialog(null);
+		
+		SourceEditDialog editDialog = new SourceEditDialog(ctx, null);
 		editDialog.setVisible(true);
 		
-		editDialog.showSource(role, source);
+		editDialog.showSource(source);
 	}
 	
 	private void updateComboBox(Object lv0Item){

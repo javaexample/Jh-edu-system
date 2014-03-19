@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 
+import Crm.NewMain.JHContext;
 import view.component.SourceEditPanel;
 import dao.DAORegistry;
 import dao.SourceDAO;
@@ -24,17 +25,18 @@ public class SourceEditDialog extends JDialog {
 	private SourceEditPanel editComp ;
 	private SourceUpdateListener listener;
 	
-	public SourceEditDialog (SourceUpdateListener parent) {
+	private JHContext ctx;
+	public SourceEditDialog (JHContext ctx, SourceUpdateListener parent) {
 		
 		this.setTitle("소스 편집");
 		
-		this.setSize(300, 400);
+		this.setSize(600, 500);
 		
 		this.listener = parent ;
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		editComp = new SourceEditPanel();
+		editComp = new SourceEditPanel(ctx);
 		getContentPane().add(editComp, BorderLayout.CENTER);
 		
 		JButton btnEdit = new JButton("Edit");
@@ -44,19 +46,21 @@ public class SourceEditDialog extends JDialog {
 			}
 		});
 		editComp.add(btnEdit, BorderLayout.SOUTH);
+		
+		this.ctx = ctx;
 	}
 	
-	public void showSource(Role role, SourceModel src) {
+	public void showSource(SourceModel src) {
 		editComp.showSource(src);
-		RoleLevel level = role.getLevel();
-		
-		if ( level == RoleLevel.SUPERVISOR) {
-			this.editComp.setTypeEditable(true);
-		} else if ( level == RoleLevel.TEAM_SUPPORT ) {
-			this.editComp.setTypeEditable(false) ;
-		} else {
-			throw new RuntimeException("알 수 없는 role level : " + role );
-		}
+//		RoleLevel level = role.getLevel();
+//		
+//		if ( level == RoleLevel.SUPERVISOR) {
+//			this.editComp.setTypeEditable(true);
+//		} else if ( level == RoleLevel.TEAM_SUPPORT ) {
+//			this.editComp.setTypeEditable(false) ;
+//		} else {
+//			throw new RuntimeException("알 수 없는 role level : " + role );
+//		}
 	}
 	
 	/*

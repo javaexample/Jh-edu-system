@@ -13,6 +13,9 @@ public enum RoleLevel {
 		this.roleName = name;
 	}
 	
+	public String asRoleName() {
+		return roleName;
+	}
 	@Override
 	public String toString() {
 		return "[¿ªÇÒ:" + this.roleName + "]";

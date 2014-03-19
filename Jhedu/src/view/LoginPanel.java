@@ -87,12 +87,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-			}
+			public void keyPressed(KeyEvent e) {}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
-			}
+			public void keyReleased(KeyEvent e) {}
 
 		};
 
@@ -126,12 +124,12 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 			if (emp.getPart().equals("관리자")) {
 				role = new Role(RoleLevel.SUPERVISOR);
-
 			} else {
 				role = new Role(RoleLevel.TEAM_SUPPORT);
 			}
 
-			showDialog(role);
+			context.setRole(role);
+			showDialog(context);
 
 		} catch (SQLException e) {
 
@@ -139,15 +137,18 @@ public class LoginPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	private void showDialog(Role role) {
+	private void showDialog(JHContext ctx) {
 		Component nextComp = null;
 
+		Role role = ctx.getRole();
+		
 		//권한별로 프레임 변경되는 부분
-		if (role.getLevel() == RoleLevel.SUPERVISOR) {
-			nextComp = new SupervisorPanel(role);
+		if (role.getLevel() == RoleLevel.SUPERVISOR)
+		{
+			nextComp = new SupervisorPanel(ctx);
 
 		} else if (role.getLevel() == RoleLevel.TEAM_SUPPORT) {
-			nextComp = new SourceViewPanel(role);
+			nextComp = new SourceViewPanel(ctx);
 
 		}
 		// TODO 이런 식으로 판넬을 늘리면 됩니다.

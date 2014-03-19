@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 
+import Crm.NewMain.JHContext;
 import view.SourceEditDialog;
 import view.SourceEditDialog.SourceUpdateListener;
 import model.Role;
@@ -31,12 +32,13 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 	private SourceTableModel tableModel ;
 	private JTable sourceTable  ;
 	
-	SourceEditDialog editDialog = new SourceEditDialog(SourceViewPanel.this);
-	private Role role ;
+	SourceEditDialog editDialog ;
+//	private Role role ;
+	private JHContext ctx ;
 	private JTextField sourceTypeTextField;
 	private JComboBox comboBox;
 	
-	public SourceViewPanel ( Role role  ) {
+	public SourceViewPanel ( JHContext ctx  ) {
 		
 		this.setLayout(new BorderLayout());
 		
@@ -109,7 +111,9 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 
 		this.setSize(1375, 770);
 		
-		this.role = role;
+		this.ctx = ctx;
+		
+		this.editDialog = new SourceEditDialog(ctx, this);
 		
 		install();
 		this.loadData();
@@ -190,7 +194,7 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 				SourceModel source = dao.getSourceById( sourceID );
 				
 				editDialog.setVisible(true);			
-				editDialog.showSource( role, source);
+				editDialog.showSource( source);
 				
 			} catch (ClassNotFoundException e1) {
 				e1.printStackTrace();

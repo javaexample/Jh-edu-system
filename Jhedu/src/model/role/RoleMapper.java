@@ -168,6 +168,14 @@ public class RoleMapper{
 		}
 		return acc;
 	}
+	public Map<String, ColumnAccess> listColumns(String roleName) {
+		Map<String, ColumnAccess> columnAccessInfo = rcMap.get(roleName);
+		
+		if ( columnAccessInfo == null ) {
+			throw new RuntimeException("invalid role name : " + roleName);
+		}
+		return columnAccessInfo;
+	}
 	
 
 }

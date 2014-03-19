@@ -8,8 +8,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import model.Role;
 import model.role.RoleMapper;
-
 import view.LoginPanel;
 import dao.DAORegistry;
 import dao.column.ColumnInfoLoader;
@@ -24,8 +24,22 @@ public class NewMain extends JFrame {
 		DAORegistry registry ;
 		ColumnInfoLoader columnLoader;
 		RoleMapper roleMapper;
+		
+		Role role ; // 로그인 하면 설정
 		public DAORegistry getDAORegistry() {
 			return registry;
+		}
+		
+		public void setRole(Role role) {
+			this.role = role;
+		}
+		
+		public Role getRole() {
+			 return this.role;
+		}
+
+		public RoleMapper getRoleMapper() {
+			return this.roleMapper;
 		}
 		
 	}

@@ -5,6 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * column.config 파일을 읽어서 columnMapper 인스턴스를 생성
+ * 
+ * @author Youngjae
+ *
+ */
 public class ColumnInfoLoader {
 	
 	private HashMap<String, ColumnMapper> columnMap = new HashMap<>();
