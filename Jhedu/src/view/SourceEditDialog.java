@@ -61,17 +61,13 @@ public class SourceEditDialog extends JDialog {
 		if ( editComp.isModifed()) {
 			
 			SourceModel source = editComp.getSourceModel();
+			editComp.writeToSourceModel(source);
 			
-			DAORegistry registry;
 			try {
-				
-				registry = DAORegistry.getInstance();
-				SourceDAO dao = registry.getSourceDAO();
+				SourceDAO dao = ctx.getDAORegistry().getSourceDAO();
 				dao.updateSource(source);
 				notifySourceUpdated(source);
 						
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

@@ -2,6 +2,9 @@ package view.component;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -15,6 +18,8 @@ import Crm.JHContext;
 import view.SearchResultDialog;
 import view.SourceEditDialog;
 import view.SourceEditDialog.SourceUpdateListener;
+import view.SourceInsertDialog;
+import model.EmployeeModel;
 import model.Role;
 import model.RoleLevel;
 import model.SourceModel;
@@ -54,7 +59,7 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 		/* click listener 설치 */
 		sourceTable.addMouseListener(new ClickListener());
 		
-		if ( ctx.getRole().getLevel() == RoleLevel.TEAM_SUPPORT){
+//		if ( ctx.getRole().getLevel() == RoleLevel.TEAM_SUPPORT){
 			
 			JPanel searchPanel = new JPanel();
 			add(searchPanel, BorderLayout.NORTH);
@@ -69,6 +74,17 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 			searchPanel.add(comboBox, gbc_comboBox);
 			
 			sourceTypeTextField = new JTextField();
+			sourceTypeTextField.addKeyListener(new KeyAdapter(){
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+
+					if ( e.getKeyChar() == '\n') {
+						search();
+					}
+				}
+			});
+			
 			GridBagConstraints gbc_textField = new GridBagConstraints();
 			gbc_textField.insets = new Insets(0, 0, 5, 5);
 			gbc_textField.gridx = 2;
@@ -93,14 +109,26 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.weightx = 1.0;
 			gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_lblNewLabel.gridx = 0;
 			gbc_lblNewLabel.gridy = 0;
 			searchPanel.add(lblNewLabel, gbc_lblNewLabel);
 			
+			JButton btnNewButton = new JButton("\uC18C\uC2A4\uC785\uB825\uCC3D");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					showSourceInputDialog();
+				}
+			});
+			GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+			gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+			gbc_btnNewButton.gridx = 4;
+			gbc_btnNewButton.gridy = 0;
+			searchPanel.add(btnNewButton, gbc_btnNewButton);
+			
 			install();
 			
-		}
+//		}
 		
 		
 		
@@ -163,8 +191,10 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 				return ;
 				
 			} else if ( sources.size() == 1 ){
-				tableModel.clearSources();				
-				drawSourceData(sources);
+				editDialog.showSource(sources.get(0));
+				editDialog.setVisible(true);
+				editDialog.setLocationRelativeTo(this);
+				
 			} else {
 				SearchResultDialog searchResultDialog = new SearchResultDialog( ctx, this,this );
 				searchResultDialog.showDialog(sources);
@@ -178,14 +208,36 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 	public void loadData() {
 		SourceDAO dao;
 		try {
-			dao = DAORegistry.getInstance().getSourceDAO();
-			List<SourceModel> sources = dao.getSource();
+			dao = ctx.getDAORegistry().getSourceDAO(); /*DAORegistry.getInstance().getSourceDAO();*/
+			EmployeeModel emp = ctx.getCurrentEmployee();
+			String roleName = ctx.getRole().getRoleName();
+			List<SourceModel> sources = null;
 			
-			tableModel.clearSources();
+			// TODO 리팩토링 해야함. 
+			if ( roleName.equals("학습지원")) {
+				
+				sources = dao.getSource("담당자", emp.getName() );
+				
+			} else if ( roleName.equals("학습운영")) {
+				sources = dao.getSource("교재상태", "배송대기");
+			} else if ( roleName.equals("회계")) {
+				sources = dao.getSource("결제상태", "승인요청");
+			} else {
+				throw new RuntimeException("알 수 없는 부서 이름 : " + roleName);
+			}
 			
-			drawSourceData(sources);
 			
-		} catch (ClassNotFoundException | SQLException e) {
+			final List<SourceModel> ref = sources;
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					tableModel.clearSources();
+					drawSourceData(ref);
+				}
+			});
+			
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -199,6 +251,13 @@ public class SourceViewPanel extends JPanel implements SourceUpdateListener {
 			tableModel.addRow(it.next());
 		}
 		
+	}
+	
+	private void showSourceInputDialog() {
+		SourceInsertDialog dialog = new SourceInsertDialog(this.ctx);
+		dialog.setSize(300, 250);
+		dialog.setLocationRelativeTo(null);;
+		dialog.setVisible(true);
 	}
 	
 	class ClickListener extends MouseAdapter {

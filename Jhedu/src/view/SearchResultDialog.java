@@ -61,6 +61,7 @@ public class SearchResultDialog extends JDialog {
 		Iterator<SourceModel> it = sources.iterator();
 		
 		listModel.clear();
+		this.pack();
 		while ( it.hasNext()) {
 			SourceModel src = it.next();
 			
@@ -68,7 +69,7 @@ public class SearchResultDialog extends JDialog {
 		}
 		
 //		this.setSize(400, 250);
-		this.pack();
+//		this.pack();
 		this.setLocationRelativeTo(opener);
 		this.setVisible(true);
 	}

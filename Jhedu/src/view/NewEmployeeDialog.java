@@ -148,9 +148,17 @@ public class NewEmployeeDialog extends JDialog implements ActionListener {
 			
 			
 			String part = (String) cbPart.getSelectedItem();
-			System.out.printf("%s %s %s %s", empID, empName, empPassword, part);
+//			System.out.printf("%s %s %s %s", empID, empName, empPassword, part);
 			EmployeeModel emp = dao.insertEmployee(new EmployeeModel(empID, empPassword, empName, part));
-			JOptionPane.showMessageDialog(this, emp.toString() );
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("가입을 완료했습니다.");
+			sb.append("\n");
+			sb.append("아이디 : " + emp.getEmpId());
+			sb.append("\n");
+			sb.append("부서   : " + emp.getPart());
+			
+			JOptionPane.showMessageDialog(this, sb.toString());
 			
 			closeDialog();
 			

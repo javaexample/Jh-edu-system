@@ -21,6 +21,8 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.SliderUI;
 
 import Crm.JHContext;
 import view.SourceEditDialog;
@@ -32,10 +34,15 @@ import model.SourceTableModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SupervisorPanel extends JPanel {
+	final private static SearchFilter FILTER_BY_STATE = new FindBySourceState();
+	final private static SearchFilter FILTER_BY_EMPLOYEE = new FindByEmployeeName();
+
 	private JTable table;
 	private JComboBox<String> lv0SearchCombobox;
 	private JComboBox<String> lv1SearchCombobox;
@@ -45,8 +52,11 @@ public class SupervisorPanel extends JPanel {
 	private String [] columnName;
 	private SourceTableModel tableModel;
 		
+	SourceEditDialog editDialog;
 	
 	private JHContext ctx ;
+	
+	private SearchFilter searchFilter ;
 	/**
 	 * Create the panel.
 	 */
@@ -54,6 +64,9 @@ public class SupervisorPanel extends JPanel {
 		
 		this.ctx = ctx;
 		this.columnName = ctx.getBaseColumnNames();
+		this.searchFilter = FILTER_BY_STATE ;
+		
+		editDialog = new SourceEditDialog(ctx, null);
 		
 		setLayout(new BorderLayout(0, 0));
 		
@@ -128,6 +141,7 @@ public class SupervisorPanel extends JPanel {
 		
 		search();
 		
+		new ReloadThread(this, ctx).start();
 
 	}
 	
@@ -140,9 +154,27 @@ public class SupervisorPanel extends JPanel {
 		list0.add("폐기");
 		
 		searchData.put("소스상태", list0);
-		
-		
 		lv0SearchCombobox.addItem("소스상태");
+		
+		ArrayList<String> list1 = new ArrayList<>();
+		list1.add("윤병철");
+		list1.add("김명덕");
+		list1.add("정미희");
+		list1.add("이은주");
+		list1.add("박희영");
+		list1.add("유현지");
+		searchData.put("담당자", list1);
+		
+		
+		lv0SearchCombobox.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				String comboItem = (String) e.getItem();
+				updateComboBox(comboItem);
+			}
+		});
+		lv0SearchCombobox.addItem("담당자");
 		
 		updateComboBox(lv0SearchCombobox.getSelectedItem());
 		
@@ -152,7 +184,7 @@ public class SupervisorPanel extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("???");
+				// System.out.println("???");
 				if ( e.getClickCount() == 2) {
 					processSourceDetailDialog();
 				}
@@ -162,12 +194,12 @@ public class SupervisorPanel extends JPanel {
 	
 	/*
 	 * 상세 정보 창 보여주기
+	 * 창 하나에서만 뜨도록 수정
 	 */
 	private void processSourceDetailDialog() {
 		int selectedRow = table.getSelectedRow();
 		SourceModel source = tableModel.getSourceAt(selectedRow);
 		
-		SourceEditDialog editDialog = new SourceEditDialog(ctx, null);
 		editDialog.setVisible(true);
 		editDialog.setLocationRelativeTo(this);
 		
@@ -182,6 +214,14 @@ public class SupervisorPanel extends JPanel {
 		
 		while ( it.hasNext() ) {
 			lv1SearchCombobox.addItem(it.next());
+		}
+		
+		if ( "소스상태".equals(lv0Item)) {
+			searchFilter = FILTER_BY_STATE;
+		} else if ( "담당자".equals(lv0Item)) {
+			searchFilter = FILTER_BY_EMPLOYEE;
+		} else {
+			throw new RuntimeException("알 수 없는 필터명 : " + lv0Item);
 		}
 		
 	}
@@ -204,14 +244,21 @@ public class SupervisorPanel extends JPanel {
 	}
 	
 	public void search() {
-		// TODO combobox 의 값을 잡아서 뿌려줌.
-		
 		try {
 			SourceDAO dao = DAORegistry.getInstance().getSourceDAO();
+			String selectedItem = (String) lv0SearchCombobox.getSelectedItem();
+			Object clause = null;
 			
-			String [] states = createStates();
+			if ( "소스상태".equals(selectedItem)) {
+				clause = createStates();
+			} else if ("담당자".equals(selectedItem)) {
+				clause = lv1SearchCombobox.getSelectedItem();
+			} else {
+				throw new RuntimeException("선택된 값이 유효하지 않음 : " + selectedItem);
+			}
 			
-			List<SourceModel> sourceList = dao.findBySourceState(states);
+			List<SourceModel> sourceList = searchFilter.search(ctx, clause);
+
 
 			updateSource(sourceList);
 			
@@ -222,13 +269,74 @@ public class SupervisorPanel extends JPanel {
 		}
 	}
 	
+	private static interface SearchFilter {
+		public List<SourceModel> search (JHContext ctx, Object clause) throws SQLException ;
+	}
+	
+	static class FindBySourceState implements SearchFilter {
+
+		@Override
+		public List<SourceModel> search(JHContext ctx, Object data) throws SQLException {
+			SourceDAO dao = ctx.getDAORegistry().getSourceDAO();
+			String [] states = (String []) data;
+			return dao.findBySourceState(states);
+			
+		}	
+	}
+	
+	static class FindByEmployeeName implements SearchFilter {
+
+		@Override
+		public List<SourceModel> search(JHContext ctx, Object clause)
+				throws SQLException {
+			SourceDAO dao = ctx.getDAORegistry().getSourceDAO();
+			String empName = (String) clause;
+			return dao.getSource("담당자", empName);
+		}
+		
+	}
+	
+	
+	
 	/**
 	 * 새로운 소스 정보를 테이블에 출력함
 	 * @param sourceList
 	 */
-	public void updateSource(List<SourceModel> sourceList) {
-		tableModel.clearSources(); // 다 날려버림
-		tableModel.addSources(sourceList);
+	public void updateSource(final List<SourceModel> sourceList) {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				tableModel.clearSources(); // 다 날려버림
+				tableModel.addSources(sourceList);
+				
+			}
+		});
+	}
+	
+	static class ReloadThread extends Thread  {
+		
+		JHContext ctx ;
+		SupervisorPanel panel ;
+		ReloadThread (SupervisorPanel panel, JHContext context ) {
+			ctx = context;
+			this.panel = panel ;
+		}
+		
+		@Override
+		public void run() {
+			while ( true) {
+				
+				int interval = ctx.getReloadInterval();
+				
+				try {
+					Thread.sleep(interval * 1000 );
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				panel.search(); 
+			}
+		}
 	}
 
 }

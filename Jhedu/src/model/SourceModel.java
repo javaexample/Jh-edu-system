@@ -108,7 +108,7 @@ public class SourceModel {
 	private String bankName;
 	
 	/** 34. 현금영수증 */
-	private String cachReceiptRequired ;
+	private String cashReceiptRequired ;
 	
 	/** 35. 카드전표 */
 	private String slipRequired;
@@ -120,7 +120,7 @@ public class SourceModel {
 	
 	
 	
-	
+	public SourceModel() {}
 	
 
 	public int getSourceId() {
@@ -275,11 +275,11 @@ public class SourceModel {
 		this.level = level;
 	}
 
-	public String getCourseName() {
+	public String getCourseCount() {
 		return CourseName;
 	}
 
-	public void setCourseName(String courseName) {
+	public void setCourseCount(String courseName) {
 		CourseName = courseName;
 	}
 
@@ -371,12 +371,12 @@ public class SourceModel {
 		this.bankName = bankName;
 	}
 
-	public String isCachReceiptRequired() {
-		return cachReceiptRequired;
+	public String getCashReceiptRequired() {
+		return cashReceiptRequired;
 	}
 
-	public void setCachReceiptRequired(String cachReceiptRequired) {
-		this.cachReceiptRequired = cachReceiptRequired;
+	public void setCashReceiptRequired(String cachReceiptRequired) {
+		this.cashReceiptRequired = cachReceiptRequired;
 	}
 
 	public String getSlipRequired() {
@@ -498,7 +498,7 @@ public class SourceModel {
 		mapData.put("유효기간년", yearExpired);
 		mapData.put("할부개월", installmentMonths);
 		mapData.put("은행명", bankName);
-		mapData.put("현금영수증발급", cachReceiptRequired);
+		mapData.put("현금영수증발급", cashReceiptRequired);
 		mapData.put("카드전표발급", slipRequired);
 		mapData.put("승인번호", approvalNum);
 		

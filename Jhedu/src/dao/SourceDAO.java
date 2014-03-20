@@ -64,7 +64,13 @@ public class SourceDAO {
 		}
 	}
 	
-	public List<SourceModel> getSource() throws SQLException {
+	/**
+	 * 담당자 이름별로 등록된 소스를 조회
+	 * @param columnValue 담당자 이름
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<SourceModel> getSource(String columnName, String columnValue) throws SQLException {
 		
 		
 		String sql = "select "
@@ -77,7 +83,12 @@ public class SourceDAO {
 //				+ "소스번호, 소스종류, 유입날짜, 유입시간, "
 //				+ "일반전화,휴대전화,이름, 성별, 나이, 이메일,주소,문의내용, 담당자,"
 //				+ "요망날짜, 요망시간, 소스상태, 교재상태, 결제상태 "
-				+ "from crmdb";
+				+ "from crmdb " 
+				+ "where " + columnName 
+				+ " = ?" ;
+		String clause0 = "where 담당자 = ?";
+		String clause = "where 결제상태 = '승인요청'";
+		String clause2 = "where 교재상태 = '배송대기'";
 		
 		Connection conn = connManager.getConnection();
 		PreparedStatement pstmt = null;
@@ -88,6 +99,8 @@ public class SourceDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
+			pstmt.setString(1, columnValue);
+			
 			rs = pstmt.executeQuery();
 			
 			ArrayList<SourceModel> list = new ArrayList<>();
@@ -111,8 +124,42 @@ public class SourceDAO {
 	 */
 	public void updateSource(SourceModel source) throws SQLException {
 		String updateQuery = "UPDATE crmdb SET ";
-		updateQuery += "소스종류 = ?, "; 
-		updateQuery += "유입날짜 = ? ";
+		updateQuery += "소스종류 = ?, "; //1
+		updateQuery += "유입날짜 = ?, "; 
+		updateQuery += 	"유입시간 = ?, ";
+		updateQuery += "일반전화 = ?, ";
+		updateQuery += "휴대전화 = ?, "; // 5
+		updateQuery += "이름 = ?, ";
+		updateQuery += "성별 = ?, ";
+		updateQuery += "나이 = ?, ";
+		updateQuery += "이메일 = ?, ";
+		updateQuery += "주소 = ?, ";  // 10
+		updateQuery += "문의내용 = ?, ";
+		updateQuery += "담당자 = ?,";
+		updateQuery +=  "요망날짜 = ?, ";
+		updateQuery += "요망시간 = ?, ";
+		updateQuery += "소스상태 = ?, "; // 15
+		updateQuery += "교재상태 = ?, ";
+		updateQuery += "결제상태 = ?,";
+		updateQuery +=  "마감날짜 = ?, ";
+		updateQuery += "비고 = ?, ";
+		updateQuery += "오더일자 = ?, "; // 20
+		updateQuery += "기수 = ?, ";
+		updateQuery += "급수 = ?, ";
+		updateQuery += "과목수 = ?, ";
+		updateQuery += "할인율 = ?, ";
+		updateQuery += "등록금 = ?, "; // 25
+		updateQuery += "결제방법 = ?, ";
+		updateQuery += "카드종류 = ?, ";
+		updateQuery += "카드번호 = ?, ";
+		updateQuery += "유효기간월 = ?, ";
+		updateQuery += "유효기간년 = ?, "; // 30
+		updateQuery += "할부개월 = ?, ";
+		updateQuery += "은행명 = ?, ";
+		updateQuery += "현금영수증발급 = ?, ";
+		updateQuery += "카드전표발급 = ?, ";
+		updateQuery += "승인번호 = ? ";   // 35
+		
 		updateQuery += "WHERE 소스번호 = " + source.getId() ;
 		
 		Connection conn = null;
@@ -120,17 +167,58 @@ public class SourceDAO {
 		
 		try {
 			conn = connManager.getConnection();
+			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(updateQuery);
 			
 			pstmt.setString(1, source.getSourceType());
 			pstmt.setString(2, source.getWhenContact());
+			pstmt.setString(3, source.getContactTime());
+			pstmt.setString(4, source.getHomePhone());
+			pstmt.setString(5, source.getCellPhone());
+			pstmt.setString(6, source.getName());
+			pstmt.setString(7, source.getGender());
+			pstmt.setString(8, source.getAge());
+			pstmt.setString(9, source.getEmail());
+			pstmt.setString(10, source.getAddress());
+			pstmt.setString(11, source.getInquiry());
+			pstmt.setString(12, source.getChargedEmployee());
+			pstmt.setString(13, source.getRequiredDate());
+			pstmt.setString(14, source.getRequiredTime());
+			pstmt.setString(15, source.getSourceState());
+			pstmt.setString(16, source.getTextBookState());
+			pstmt.setString(17, source.getSettlementState());
+			pstmt.setString(18, source.getDueDate());
+			pstmt.setString(19, source.getExplanaryNote());
+			pstmt.setString(20, source.getOrderDate());
+			pstmt.setString(21, source.getSemesterCode());
+			pstmt.setString(22, source.getLevel());
+			pstmt.setString(23, source.getCourseCount());
+			pstmt.setString(24, source.getDiscountRate());
+			pstmt.setString(25, source.getRegistrationFee());
+			pstmt.setString(26, source.getSettlementType());
+			pstmt.setString(27, source.getCardType());
+			pstmt.setString(28, source.getCardNumber());
+			pstmt.setString(29, source.getMonthExpired());
+			pstmt.setString(30, source.getYearExpired());
+			pstmt.setString(31, source.getInstallmentMonths());
+			pstmt.setString(32, source.getBankName());
+			pstmt.setString(33, source.getCashReceiptRequired());
+			pstmt.setString(34, source.getSlipRequired());
+			pstmt.setString(35, source.getApprovalNum());
+//			pstmt.setString(4, "");
+//			pstmt.setString(4, "");
+//			pstmt.setString(4, "");
+//			pstmt.setString(4, "");
 			
 			int numOfChanged = pstmt.executeUpdate();
 			
 			if ( numOfChanged != 1) {
 				throw new SQLException("변경 실패했습니다. : " + source);
 			}
+			
+			conn.commit();
 		} catch (SQLException e) {
+			conn.rollback();
 			throw e;
 		} finally {
 			connManager.close(conn, pstmt, null) ;
@@ -138,31 +226,50 @@ public class SourceDAO {
 		
 	}
 	
+	
+	/**
+	 * 새로운 소스를 입력하는 쿼리
+	 * 
+	 * @param newSource
+	 * @return
+	 * @throws SQLException
+	 */
 	public SourceModel insertSource(SourceModel newSource) throws SQLException {
 
 		// TODO SourceEditPanel 에서 편집할때 호출되는 부분
 		//      column 전부 나열해줘야 함.
 		
-		String insertQuery = "INSERT INTO crmdb  ( 소스번호, 소스종류, 유입날짜) values (?, ?, ?)";
+		String insertQuery = "INSERT INTO crmdb  "
+				+ "( 소스종류, 유입날짜, 유입시간, 일반전화, 휴대전화, 이름, 성별, 문의내용 ) "
+				+ "values (?, ?, ?, ?, ?, ?, ?, ?) "
+				+ " select @@Identity";
 		
 		Connection conn = connManager.getConnection();
 		PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-		
+		ResultSet rs = null;
 		try {
+			conn.setAutoCommit(false);
 			
-			pstmt.setInt(1, newSource.getId());
-			pstmt.setString(2, newSource.getSourceType());
-			pstmt.setString(3, newSource.getWhenContact());
+			sourceToStatement(newSource, pstmt);
 			
 			int numOfChanged = pstmt.executeUpdate();
+			
+			rs = pstmt.getGeneratedKeys();
+			
+			if ( rs.next()) {
+				newSource.setId(rs.getInt(1));
+			}
+			
 			
 			if ( numOfChanged != 1) {
 				throw new SQLException("소스 생성에 실패했습니다. : " + newSource );
 			}
 			
+			conn.commit();
 			return newSource ;
 			
 		} catch (SQLException e) {
+			conn.rollback();
 			throw e;
 		} finally {
 			connManager.close(conn, pstmt, null);
@@ -317,7 +424,7 @@ public class SourceDAO {
 		source.setOrderDate(rs.getString("오더일자") );
 		source.setSemesterCode(rs.getString("기수"));
 		source.setLevel(rs.getString("급수"));
-		source.setCourseName(rs.getString("과목수"));
+		source.setCourseCount(rs.getString("과목수"));
 		source.setDiscountRate(rs.getString("할인율"));
 		source.setRegistrationFee(rs.getString("등록금"));
 		source.setSettlementType(rs.getString( "결제방법"));
@@ -327,7 +434,7 @@ public class SourceDAO {
 		source.setYearExpired(rs.getString("유효기간년"));
 		source.setInstallmentMonths(rs.getString( "할부개월"));
 		source.setBankName(rs.getString("은행명"));
-		source.setCachReceiptRequired(rs.getString("현금영수증발급"));
+		source.setCashReceiptRequired(rs.getString("현금영수증발급"));
 		source.setSlipRequired(rs.getString("카드전표발급"));
 		source.setApprovalNum(rs.getString("승인번호"));
 		
@@ -336,8 +443,104 @@ public class SourceDAO {
 	
 	private void sourceToStatement(SourceModel source, PreparedStatement pstmt) throws SQLException {
 		// TODO  
-//		pstmt.setInt(1, source.getId());
-//		pstmt.setString(2, source.getSourceType());
-//		pstmt.setString(3, source.getWhenContact());
+//		source.setSourceType("전화");
+//		source.setWhenContact("2014-03-20");
+//		source.setContactTime("22:00");
+//		source.setHomePhone("02-444-4443");
+//		source.setCellPhone("001-4344-4443");
+//		source.setName("김김김");
+//		source.setGender("남자");
+//		source.setInquiry("잘 되는가???");;
+		//( 소스종류, 유입날짜, 유입시간, 일반전화, 휴대전화, 이름, 성별, 문의내용 ) values (?, ?, ?, ?, ?, ?, ?, ?)";
+		pstmt.setString(1, source.getSourceType());
+		pstmt.setString(2, source.getWhenContact());
+		pstmt.setString(3, source.getContactTime());
+		pstmt.setString(4, source.getHomePhone());
+		pstmt.setString(5, source.getCellPhone());
+		pstmt.setString(6, source.getName());
+		pstmt.setString(7, source.getGender());
+		pstmt.setString(8, source.getInquiry());
 	}
+
+
+	/**
+	 * 일반 전화로 담당자 검색
+	 * @param homePhone
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<String> findSourcesByHomephone(String homePhone) throws SQLException {
+		String query = "select 담당자  from crmdb "
+				+ "where 일반전화 = ? ";
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			conn = connManager.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, homePhone);
+			
+			rs = pstmt.executeQuery();
+		
+			List<String> empList = new ArrayList<>();
+			while ( rs.next()) {
+				empList.add(rs.getString(1));
+			}
+			
+			return empList;
+			
+			
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			connManager.close(conn, pstmt, rs);
+		}
+	}
+	
+	/**
+	 * 휴대 전화로 담당자 검색
+	 * @param cellPhone
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<String> findSourcesByCellphone(String cellPhone) throws SQLException {
+		String query = "select 담당자  from crmdb "
+				+ "where 휴대전화 = ? ";
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			conn = connManager.getConnection();
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, cellPhone);
+			
+			rs = pstmt.executeQuery();
+		
+			List<String> empList = new ArrayList<>();
+			while ( rs.next()) {
+				empList.add(rs.getString(1));
+			}
+			
+			return empList;
+			
+			
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			connManager.close(conn, pstmt, rs);
+		}
+	}
+	
+//	public void updateSource(SourceModel source) throws SQLException {
+//		
+//		
+//	}
+	
 }

@@ -881,5 +881,70 @@ public class SourceEditPanel extends JPanel {
 	public boolean isModifed() {
 		// TODO 변경 내역 확인하는 로직 구현해야 함.
 		return true;
+	}
+
+	private String getComponentValue(List<Component> components, String compName) {
+		Component comp = findComponent(components, compName);
+		if ( comp == null ) {
+			throw new RuntimeException("컴포넌트를 찾을 수 없음. name : " + compName) ;
+		}
+		
+		String value = "";
+		if ( comp instanceof JTextComponent) {
+			value = ((JTextComponent)comp).getText();
+		} else if ( comp instanceof JComboBox ) {
+			value = (String) ((JComboBox)comp).getSelectedItem();
+		} else {
+			throw new RuntimeException (" 알수 없는 컴포넌트 타입 : " + comp.getClass().getName());
+		}
+		
+		return value;
+	}
+	/**
+	 * 입력 양식의 값을 소스로 써넣는 메소드
+	 * @param source
+	 */
+	public void writeToSourceModel(SourceModel source) {
+		
+		ArrayList<Component> list = new ArrayList<>();
+		getAllComponents(list, this);
+		
+		source.setSourceType( getComponentValue(list, "소스종류") );
+		source.setWhenContact(getComponentValue(list, "유입날짜"));
+		source.setContactTime(getComponentValue(list, "유입시간"));
+		source.setHomePhone(getComponentValue(list, "일반전화"));
+		source.setCellPhone(getComponentValue(list, "휴대전화"));
+		source.setName(getComponentValue(list, "이름"));
+		source.setGender(getComponentValue(list, "성별"));
+		source.setAge(getComponentValue(list, "나이"));
+		source.setEmail(getComponentValue(list, "이메일"));
+		source.setAddress(getComponentValue(list, "주소"));
+		source.setInquiry(getComponentValue(list, "문의내용"));
+		source.setChargedEmployee(getComponentValue(list, "담당자"));
+		source.setRequiredDate(getComponentValue(list, "요망날짜"));
+		source.setRequiredTime(getComponentValue(list, "요망시간"));
+		
+		source.setSourceState(getComponentValue(list, "소스상태"));
+		source.setTextBookState(getComponentValue(list, "교재상태"));
+		source.setSettlementState(getComponentValue(list, "결제상태"));
+		source.setDueDate(getComponentValue(list, "마감날짜"));
+		source.setExplanaryNote(getComponentValue(list, "비고"));
+		source.setOrderDate(getComponentValue(list, "오더일자"));
+		source.setSemesterCode(getComponentValue(list, "기수"));
+		source.setLevel(getComponentValue(list, "급수"));
+		source.setCourseCount(getComponentValue(list, "과목수"));
+		source.setDiscountRate(getComponentValue(list, "할인율"));
+		source.setRegistrationFee(getComponentValue(list, "등록금"));
+		source.setSettlementType(getComponentValue(list, "결제방법"));
+		source.setCardType(getComponentValue(list, "카드종류"));
+		source.setCardNumber(getComponentValue(list, "카드번호"));
+		source.setMonthExpired(getComponentValue(list, "유효기간월"));
+		source.setYearExpired(getComponentValue(list, "유효기간년"));
+		source.setInstallmentMonths(getComponentValue(list, "할부개월"));
+		source.setBankName(getComponentValue(list, "은행명"));
+		source.setCashReceiptRequired(getComponentValue(list, "현금영수증발급"));
+		source.setSlipRequired(getComponentValue(list, "카드전표발급"));
+		source.setApprovalNum(getComponentValue(list, "승인번호"));
+		
 	}	
 }

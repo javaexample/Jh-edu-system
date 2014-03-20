@@ -2,6 +2,7 @@ package Crm;
 
 import java.util.List;
 
+import model.EmployeeModel;
 import model.Role;
 import model.role.RoleMapper;
 import dao.DAORegistry;
@@ -16,6 +17,8 @@ public class JHContext {
 	Role role ; // 로그인 하면 설정
 	
 	private int reloadInterval  = 3; // as seconds
+	private EmployeeModel employee;
+	
 	
 	public DAORegistry getDAORegistry() {
 		return registry;
@@ -45,6 +48,14 @@ public class JHContext {
 	
 	public int getReloadInterval() {
 		return this.reloadInterval;
+	}
+
+	public EmployeeModel getCurrentEmployee(){
+		return this.employee;
+	}
+	public void setEmployee(EmployeeModel emp) {
+		this.employee = emp;
+		
 	}
 	
 }

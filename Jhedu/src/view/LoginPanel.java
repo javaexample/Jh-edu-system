@@ -120,7 +120,9 @@ public class LoginPanel extends JPanel implements ActionListener {
 			EmployeeDAO dao = context.getDAORegistry().getEmployeeDAO();
 
 			EmployeeModel emp = dao.getEmployee(id, password);
-
+			
+			context.setEmployee(emp);
+			
 			Role role = null;
 
 			if (emp.getPart().equals("°ü¸®ÀÚ")) {
@@ -153,7 +155,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		
 		if ( role.getLevel() == RoleLevel.TEAM_PARTTIMER ) {
 			
-			SourceEditDialog dialog = new SourceEditDialog(ctx, new SourceInsertListener());
+			SourceInsertDialog dialog = new SourceInsertDialog(ctx);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.addWindowListener(new WindowAdapter() {
 				@Override
@@ -161,15 +163,19 @@ public class LoginPanel extends JPanel implements ActionListener {
 					System.exit(0);
 				}
 			});
+			dialog.setSize(350, 300);
 			dialog.setLocationRelativeTo(this);
-			dialog.setVisible(true); 
+			dialog.setLocationRelativeTo(this);
+			dialog.setVisible(true);
+			
 			
 		} else {
 			if (role.getLevel() == RoleLevel.SUPERVISOR)
 			{
 				nextComp = new SupervisorPanel(ctx);
 
-			} else {
+			} 
+			else {
 				nextComp = new SourceViewPanel(ctx);
 
 			}
